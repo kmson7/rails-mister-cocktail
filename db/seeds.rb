@@ -4,6 +4,14 @@ require 'faker'
 
 # destroy cocktails and ingredients first
 
+puts "cleaning db..."
+Cocktail.destroy_all
+Ingredient.destroy_all
+Dose.destroy_all
+
+puts "db cleaned!"
+
+puts 'seeding...'
 
 url = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list'
 ingredients_raw = open(url).read
@@ -15,16 +23,12 @@ ingredients_arr.each do |ingredients_hash|
   ingredients << ingredients_hash['strIngredient1']
 end
 
-10.times do
+50.times do
   ingredient = Ingredient.create(name: ingredients.sample)
   cocktail = Cocktail.create(name: Faker::Beer.name)
-  dose = Dose.new(description: Faker::Food.measurement)
-
-  dose.cocktail = cocktail
-  dose.ingredient = ingredient
-  dose.save
-  puts 'added'
+  puts "added #{ingredient}"
 end
 
 puts ' '
-puts 'done!'
+
+puts 'seeding done!'
